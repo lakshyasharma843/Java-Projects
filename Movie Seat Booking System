@@ -1,0 +1,975 @@
+import java.sql.*;
+import java.sql.DriverManager;
+import java.sql.Connection;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;   
+import java.util.regex.Matcher; 
+import java.util.regex.Pattern;
+
+class global{
+	
+	public static int  user_id;
+	public static String moviename;
+	public static String time;
+}
+class Registration extends JFrame implements ActionListener
+{   
+    JLabel L1,L2,L3,L4,L5,L6,L7,L8;
+    
+    JTextField tf1,tf2,tf3,tf4,tf5;
+    JPasswordField jp1, jp2;
+    
+    JButton btn1, btn2;
+    
+    public Registration()
+    {
+        
+        setSize(600,600);
+        setLayout(null);
+        
+        L1 = new JLabel("Sign Up For Movie");
+        L1.setForeground(Color.red);
+        L1.setFont(new Font("Algerian",Font.BOLD, 20));
+        add(L1);
+        
+        L2 = new JLabel("Name");
+        L3 = new JLabel("username");
+        L4 = new JLabel("Mobile");
+        L5 = new JLabel("Country");
+        L6 = new JLabel("State");
+        L7 = new JLabel("Password");
+        L8 = new JLabel("Confirm PW");
+        
+        tf1 = new JTextField();
+        tf2 = new JTextField();
+        tf3 = new JTextField();
+        tf4 = new JTextField();
+        tf5 = new JTextField();
+        jp1 = new JPasswordField();
+        jp2 = new JPasswordField();
+        
+        btn1 = new JButton("Submit  ");
+        btn2 = new JButton("Clear");
+        
+        L1.setBounds(180, 50, 400, 50);
+        L2.setBounds(100, 100, 200, 50);
+        L3.setBounds(100, 150, 200, 50);
+        L4.setBounds(100, 200, 200, 50);
+        L5.setBounds(100, 250, 200, 50);
+        L6.setBounds(100, 300, 200, 50);
+        L7.setBounds(100, 350, 200, 50);
+        L8.setBounds(100, 400, 200, 50);
+        
+        tf1.setBounds(200, 115, 200,20);
+        tf2.setBounds(200, 165, 200,20);
+        tf3.setBounds(200, 215, 200,20);
+        tf4.setBounds(200, 265, 200,20);
+        tf5.setBounds(200, 315, 200,20);
+        jp1.setBounds(200, 365, 200,20);
+        jp2.setBounds(200, 415, 200,20);
+        
+        btn1.setBounds(150,450,100, 50);
+        btn2.setBounds(270,450,100, 50);
+		btn1.setBackground(Color.WHITE);
+		btn2.setBackground(Color.WHITE);
+        
+        
+        add(L1);
+        add(L2);
+        add(L3);
+        add(L4);
+        add(L5);
+        add(L6);
+        add(L7);
+        add(L8);
+        add(tf1);
+        add(tf2);
+        add(tf3);
+        add(tf4);
+        add(tf5);
+        add(jp1);
+        add(jp2);
+        add(btn1);
+        add(btn2);
+        
+        btn1.addActionListener(this);
+        btn2.addActionListener(this);
+        setVisible(true);
+          
+    }
+    public void actionPerformed(ActionEvent e) 
+    {
+         if(e.getSource()==btn1)
+         {
+             int val = 0;
+			 
+             String s1 = tf1.getText();
+             String s2 = tf2.getText();
+             String s3 = tf3.getText();
+             String s4 = tf4.getText();
+             String s5 = tf5.getText();
+             char[] s6 = jp1.getPassword();
+             char[] s7 = jp2.getPassword();  
+             String s8 = new String(s6);
+             String s9 = new String(s7);
+			 String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
+			 
+			 if(!s1.equals("") && !s2.equals("") && !s3.equals("") && !s4.equals("") && !s5.equals("") && !s8.equals("") && !s9.equals("")){
+             
+			 if(s2.matches(regex)){
+			 
+             if (s8.equals(s9) &&  s3.length()==10 && s8.length()>=10)
+             {
+				
+                 try 
+                 {
+                    Class.forName("com.mysql.jdbc.Driver");
+			
+		            Connection con=DriverManager.getConnection("jdbc:mysql://localhost/java?user=root&password=");
+                     
+                     //Statement st = con.createStatement();
+                                        
+                     PreparedStatement prd = con.prepareStatement("insert into movie(name,username,mobile,country,state,password) values(?,?,?,?,?,?)");
+                     prd.setString(1, s1);
+                     prd.setString(2, s2);
+                     prd.setString(3, s3);
+                     prd.setString(4, s4);
+                     prd.setString(5, s5);
+                     prd.setString(6, s8);
+                    
+                     prd.executeUpdate();
+                     val++;
+                     
+                     if (val>0)
+                     {
+                         JOptionPane.showMessageDialog(btn1, "Data Inserted !");
+                     }
+
+                     
+                     
+                 } 
+                 catch (Exception ex){
+					 btn1.setBackground(Color.RED);
+                     
+                 } 
+             }
+			 else{
+				 btn1.setBackground(Color.RED);
+				 
+				 }
+			}
+			 else{
+				btn1.setBackground(Color.RED);
+				
+				 
+			    }
+			}
+			else{
+				btn1.setBackground(Color.RED);
+				
+			}
+		}
+
+         if (e.getSource()==btn2)
+         {
+             tf1.setText("");
+             tf2.setText("");
+             tf3.setText("");
+             tf4.setText("");
+             tf5.setText("");
+             jp1.setText("");
+             jp2.setText("");
+			 btn1.setBackground(Color.WHITE);
+         }
+             
+    }
+    
+    
+
+    
+}
+//LOG IN
+class SwingGui3 extends global implements ActionListener{
+	Frame f1;
+	Label l1,l2,l3;
+	TextField t1;
+    JPasswordField jp1;	
+	Button btn1 , btn2;
+	//global g1 = new global();
+	public SwingGui3(){
+		f1=new Frame();
+		f1.setSize(500,500);
+		f1.setBackground(Color.BLACK);
+		Font f=new Font("comic sans ms",Font.BOLD,30);
+		Font F=new Font("comic sans ms",Font.BOLD,20);
+		
+		t1=new TextField();
+		jp1 = new JPasswordField();
+		l1=new Label("Log In ");
+		l2=new Label("Enter the Username name");
+		l3=new Label("Enter the Password");
+		l1.setFont(f);
+		l2.setFont(F);
+		l3.setFont(F);
+		l1.setBackground(Color.YELLOW);
+		//l2.setBackground(Color.RED);
+		l2.setForeground(Color.RED);
+		l3.setForeground(Color.RED);
+		t1.setBackground(Color.WHITE); 		
+        t1.setForeground(Color.BLACK);
+		jp1.setBackground(Color.WHITE); 		
+        jp1.setForeground(Color.BLACK);
+		
+		
+        btn1=new Button("Log In");
+		btn2=new Button("Sign In");
+        
+        l1.setBounds(180,50,100,45);
+		l2.setBounds(125,150,250,30);
+		l3.setBounds(125,250,250,30);
+		t1.setBounds(125,200,250,30);
+		jp1.setBounds(125,300,250,30);
+		btn1.setBounds(160,400,80,40);
+		btn2.setBounds(250,400,80,40);
+		  
+		  
+		f1.add(l1);
+		f1.add(l2);
+		f1.add(t1);
+		f1.add(jp1);
+		f1.add(l3);
+		f1.add(btn1);		
+		f1.add(btn2);
+        btn1.addActionListener(this);
+        btn2.addActionListener(this);
+        f1.setLayout(null);
+		f1.setVisible(true);		
+
+		
+	}
+	
+	public void actionPerformed(ActionEvent e){
+		try{
+			Class.forName("com.mysql.jdbc.Driver");
+			
+		    Connection con=DriverManager.getConnection("jdbc:mysql://localhost/java?user=root&password=");
+		if(e.getSource()==btn1){
+			char[] s = jp1.getPassword();
+			String s1 = new String(s);
+			String text = t1.getText();
+			
+			String qryy="SELECT username , password , id FROM movie";
+			PreparedStatement ps=con.prepareStatement(qryy);
+			ResultSet rs=ps.executeQuery();
+			
+			while(rs.next()){
+				String user = rs.getString("username");
+                String pass =  rs.getString("password");
+				global.user_id =  rs.getInt("id");
+				//System.out.println(global.user_id);
+				if(!s1.equals("") && !text.equals("")){
+				
+				if((s1.equals(pass)) && (text.equals(user))){
+					new SwingGui();
+				}
+				else{
+					btn1.setBackground(Color.RED); 
+				}
+				
+				}
+				else{
+					btn1.setBackground(Color.RED); 
+				}
+
+			}
+		}
+		
+		if(e.getSource()==btn2){
+		    new Registration();
+	
+	
+		}
+		
+	
+	}
+	catch(Exception e1){
+			System.out.println(e1);
+		}
+	
+	
+	
+}
+}
+
+//Seat Booking
+class SwingGui2 extends global implements ActionListener {
+	
+	Frame f1;
+	
+	Button btn1,btn2,btn3,btn4,btn5,btn6,btn7,btn8,btn9,btn10,btn11,btn12,btn13,btn14,btn15,btn16,btn17,btn18,btn19,btn20,btn21;
+	global g = new global();
+	public SwingGui2(){
+		f1=new Frame();
+		f1.setSize(1000,500);
+		f1.setBackground(Color.BLACK);
+		
+        btn1=new Button("Seat 1");
+        btn2=new Button("Seat 2");
+        btn3=new Button("Seat 3");
+        btn4=new Button("Seat 4");
+        btn5=new Button("Seat 5 ");
+        btn6=new Button("Seat 6");
+        btn7=new Button("Seat 7");
+        btn8=new Button("Seat 8");
+        btn9=new Button("Seat 9");
+        btn10=new Button("Seat 10");
+        btn11=new Button("Seat 11");
+        btn12=new Button("Seat 12");
+        btn13=new Button("Seat 13");
+        btn14=new Button("Seat 14");
+        btn15=new Button("Seat 15");
+        btn16=new Button("Seat 16");
+        btn17=new Button("Seat 17");
+        btn18=new Button("Seat 18");
+        btn19=new Button("Seat 19");
+        btn20=new Button("Seat 20");
+        btn21=new Button("Done");
+		
+		btn1.setBounds(40,100,100,30);
+		btn2.setBounds(140,100,100,30);
+		btn3.setBounds(240,100,100,30);
+		btn4.setBounds(340,100,100,30);
+		btn5.setBounds(40,200,100,30);
+		btn6.setBounds(140,200,100,30);
+		btn7.setBounds(240,200,100,30);
+		btn8.setBounds(340,200,100,30);
+		
+		
+		btn9.setBounds(540,100,100,30);
+		btn10.setBounds(640,100,100,30);
+		btn11.setBounds(740,100,100,30);
+		btn12.setBounds(840,100,100,30);
+		btn13.setBounds(540,200,100,30);
+		btn14.setBounds(640,200,100,30);
+		btn15.setBounds(740,200,100,30);
+		btn16.setBounds(840,200,100,30);
+		
+		btn17.setBounds(140,350,100,40);
+		btn18.setBounds(340,350,100,40);
+		btn19.setBounds(540,350,100,40);
+		btn20.setBounds(740,350,100,40);
+		
+		btn21.setBounds(420,450,100,30);
+		
+		
+		
+		
+		f1.add(btn1);
+		f1.add(btn2);
+		f1.add(btn3);
+		f1.add(btn4);
+		f1.add(btn5);
+		f1.add(btn6);
+		f1.add(btn7);
+		f1.add(btn8);
+		
+		f1.add(btn9);
+		f1.add(btn10);
+		f1.add(btn11);
+		f1.add(btn12);
+		
+		f1.add(btn13);
+		f1.add(btn14);
+		f1.add(btn15);
+		f1.add(btn16);
+
+		f1.add(btn17);
+		f1.add(btn18);
+		f1.add(btn19);
+		f1.add(btn20);
+		
+		
+		f1.add(btn21);
+		f1.setLayout(null);
+		f1.setVisible(true);
+		btn1.addActionListener(this);
+		btn2.addActionListener(this);
+		btn3.addActionListener(this);
+		btn4.addActionListener(this);
+		btn5.addActionListener(this);
+		btn6.addActionListener(this);
+		btn7.addActionListener(this);
+		btn8.addActionListener(this);
+		btn9.addActionListener(this);
+		btn10.addActionListener(this);
+		btn11.addActionListener(this);
+		btn12.addActionListener(this);
+		btn13.addActionListener(this);
+		btn14.addActionListener(this);
+		btn15.addActionListener(this);
+		btn16.addActionListener(this);
+		btn17.addActionListener(this);
+		btn18.addActionListener(this);
+		btn19.addActionListener(this);
+		btn20.addActionListener(this);	
+		btn21.addActionListener(this);	
+		
+	}
+	
+	
+	public void actionPerformed(ActionEvent e){
+		
+		
+		try{
+			
+			
+			Class.forName("com.mysql.jdbc.Driver");
+			
+		    Connection con=DriverManager.getConnection("jdbc:mysql://localhost/java?user=root&password=");
+		//BUTTON 1
+		if(e.getSource()==btn1){
+			String qryy="SELECT * FROM movieseat where seat = 1 and Time = '"+global.time+"' and moviename = '"+global.moviename+"'";
+			PreparedStatement ps=con.prepareStatement(qryy);
+			ResultSet rs=ps.executeQuery();
+			
+			
+			if(rs.next()==true){
+				btn1.setBackground(Color.RED);
+			}
+			else{
+			btn1.setBackground(Color.GREEN);
+			String qry="INSERT INTO movieseat (userid , seat ,moviename,Time)"+"VALUES ('"+global.user_id+"',1,'"+global.moviename+"','"+global.time+"')";
+			ps=con.prepareStatement(qry);
+			 
+			ps.executeUpdate();
+			}
+	          
+		}
+		//BUTTON 2
+		if(e.getSource()==btn2){
+			String qryy="SELECT * FROM movieseat where seat = 2 and Time = '"+global.time+"' and moviename = '"+global.moviename+"'";
+			PreparedStatement ps=con.prepareStatement(qryy);
+			ResultSet rs=ps.executeQuery();
+			
+			
+			if(rs.next()==true){
+				btn2.setBackground(Color.RED);
+			}
+			else{
+			btn2.setBackground(Color.GREEN);
+			String qry="INSERT INTO movieseat (userid , seat ,moviename,Time)" +"VALUES ('"+global.user_id+"',2,'"+global.moviename+"','"+global.time+"')";
+			 ps=con.prepareStatement(qry);
+			
+			ps.executeUpdate();
+			}
+		}
+		//BUTTON 3
+		if(e.getSource()==btn3){
+			String qryy="SELECT * FROM movieseat where seat = 3 and Time = '"+global.time+"' and moviename = '"+global.moviename+"'";
+			PreparedStatement ps=con.prepareStatement(qryy);
+			ResultSet rs=ps.executeQuery();
+			
+			
+			if(rs.next()==true){
+				btn3.setBackground(Color.RED);
+			}
+			else{
+			btn3.setBackground(Color.GREEN);
+			String qry="INSERT INTO movieseat (userid , seat ,moviename,Time)" +"VALUES ('"+global.user_id+"',3,'"+global.moviename+"','"+global.time+"')";
+			 ps=con.prepareStatement(qry);
+			
+			ps.executeUpdate();
+			}
+		}
+		//BUTTON 4
+		if(e.getSource()==btn4){
+			
+			String qryy="SELECT * FROM movieseat where seat = 4 and Time = '"+global.time+"' and moviename = '"+global.moviename+"'";
+			PreparedStatement ps=con.prepareStatement(qryy);
+			ResultSet rs=ps.executeQuery();
+			
+			
+			if(rs.next()==true){
+				btn4.setBackground(Color.RED);
+			}
+			else{
+			btn4.setBackground(Color.GREEN);
+			String qry="INSERT INTO movieseat (userid , seat ,moviename,Time)" +"VALUES ('"+global.user_id+"',4,'"+global.moviename+"''"+global.time+"')";
+			 ps=con.prepareStatement(qry);
+			
+			ps.executeUpdate();
+			}
+		}
+		//BUTTON 5
+		if(e.getSource()==btn5){
+			String qryy="SELECT * FROM movieseat where seat = 5 and Time = '"+global.time+"' and moviename = '"+global.moviename+"'";
+			PreparedStatement ps=con.prepareStatement(qryy);
+			ResultSet rs=ps.executeQuery();
+			
+			
+			if(rs.next()==true){
+				btn5.setBackground(Color.RED);
+			}
+			else{
+			btn5.setBackground(Color.GREEN);
+			String qry="INSERT INTO movieseat (userid , seat ,moviename,Time)" +"VALUES ('"+global.user_id+"',5,'"+global.moviename+"','"+global.time+"')";
+			 ps=con.prepareStatement(qry);
+			
+			ps.executeUpdate();
+			}
+		}
+		//BUTTON 6
+		if(e.getSource()==btn6){
+			String qryy="SELECT * FROM movieseat where seat = 6 and Time = '"+global.time+"' and moviename = '"+global.moviename+"'";
+			PreparedStatement ps=con.prepareStatement(qryy);
+			ResultSet rs=ps.executeQuery();
+			
+			
+			if(rs.next()==true){
+				btn6.setBackground(Color.RED);
+			}
+			else{
+			btn6.setBackground(Color.GREEN);
+			String qry="INSERT INTO movieseat (userid , seat ,moviename,Time)" +"VALUES ('"+global.user_id+"',6,'"+global.moviename+"''"+global.time+"')";
+			 ps=con.prepareStatement(qry);
+			
+			ps.executeUpdate();
+			}
+		}
+		//BUTTON 7
+		if(e.getSource()==btn7){
+			String qryy="SELECT * FROM movieseat where seat = 7 and Time = '"+global.time+"' and moviename = '"+global.moviename+"'";
+			PreparedStatement ps=con.prepareStatement(qryy);
+			ResultSet rs=ps.executeQuery();
+			
+			
+			if(rs.next()==true){
+				btn7.setBackground(Color.RED);
+			}
+			else{
+			btn7.setBackground(Color.GREEN);
+			String qry="INSERT INTO movieseat (userid , seat ,moviename,Time)" +"VALUES ('"+global.user_id+"',7,'"+global.moviename+"','"+global.time+"')";
+			 ps=con.prepareStatement(qry);
+			
+			ps.executeUpdate();
+			}
+		}
+		//BUTTON 8
+		if(e.getSource()==btn8){
+			String qryy="SELECT * FROM movieseat where seat = 8 and Time = '"+global.time+"' and moviename = '"+global.moviename+"'";
+			PreparedStatement ps=con.prepareStatement(qryy);
+			ResultSet rs=ps.executeQuery();
+			
+			
+			if(rs.next()==true){
+				btn8.setBackground(Color.RED);
+			}
+			else{
+			btn8.setBackground(Color.GREEN);
+			String qry="INSERT INTO movieseat (userid , seat ,moviename,Time)" +"VALUES ('"+global.user_id+"',8,'"+global.moviename+"','"+global.time+"')";
+			 ps=con.prepareStatement(qry);
+			
+			ps.executeUpdate();
+			}
+		}
+		//BUTTON 9
+		if(e.getSource()==btn9){
+			String qryy="SELECT * FROM movieseat where seat = 9 and Time = '"+global.time+"' and moviename = '"+global.moviename+"'";
+			PreparedStatement ps=con.prepareStatement(qryy);
+			ResultSet rs=ps.executeQuery();
+			
+			
+			if(rs.next()==true){
+				btn9.setBackground(Color.RED);
+			}
+			else{
+			btn9.setBackground(Color.GREEN);
+			String qry="INSERT INTO movieseat (userid , seat ,moviename,Time)" +"VALUES ('"+global.user_id+"',9,'"+global.moviename+"','"+global.time+"')";
+			ps=con.prepareStatement(qry);
+			
+			ps.executeUpdate();
+			}
+		}
+		//BUTTON 10
+		if(e.getSource()==btn10){
+			String qryy="SELECT * FROM movieseat where seat = 10 and Time = '"+global.time+"' and moviename = '"+global.moviename+"'";
+			PreparedStatement ps=con.prepareStatement(qryy);
+			ResultSet rs=ps.executeQuery();
+			
+			
+			if(rs.next()==true){
+				btn10.setBackground(Color.RED);
+			}
+			else{
+			btn10.setBackground(Color.GREEN);
+			String qry="INSERT INTO movieseat (userid , seat ,moviename,Time)" +"VALUES ('"+global.user_id+"',10,'"+global.moviename+"','"+global.time+"')";
+			ps=con.prepareStatement(qry);
+			
+			ps.executeUpdate();
+			}
+		}
+		//BUTTON 11
+		if(e.getSource()==btn11){
+			String qryy="SELECT * FROM movieseat where seat = 11 and Time = '"+global.time+"' and moviename = '"+global.moviename+"'";
+			PreparedStatement ps=con.prepareStatement(qryy);
+			ResultSet rs=ps.executeQuery();
+			
+			
+			if(rs.next()==true){
+				btn11.setBackground(Color.RED);
+			}else{
+			btn11.setBackground(Color.GREEN);
+			String qry="INSERT INTO movieseat (userid , seat ,moviename,Time)" +"VALUES ('"+global.user_id+"',11,'"+global.moviename+"','"+global.time+"')";
+			 ps=con.prepareStatement(qry);
+			
+			ps.executeUpdate();
+			
+			}
+		}
+		//BUTTON 12
+		if(e.getSource()==btn12){
+			String qryy="SELECT * FROM movieseat where seat = 12 and Time = '"+global.time+"' and moviename = '"+global.moviename+"'";
+			PreparedStatement ps=con.prepareStatement(qryy);
+			ResultSet rs=ps.executeQuery();
+			
+			
+			if(rs.next()==true){
+				btn12.setBackground(Color.RED);
+			}else{
+			btn12.setBackground(Color.GREEN);
+			String qry="INSERT INTO movieseat (userid , seat ,moviename,Time)" +"VALUES ('"+global.user_id+"',12,'"+global.moviename+"','"+global.time+"')";
+			ps=con.prepareStatement(qry);
+			
+			ps.executeUpdate();
+			}
+		}
+		//BUTTON 13
+		if(e.getSource()==btn13){
+			String qryy="SELECT * FROM movieseat where seat = 13 and Time = '"+global.time+"' and moviename = '"+global.moviename+"'";
+			PreparedStatement ps=con.prepareStatement(qryy);
+			ResultSet rs=ps.executeQuery();
+			
+			
+			if(rs.next()==true){
+				btn13.setBackground(Color.RED);
+			}else{
+			btn13.setBackground(Color.GREEN);
+			String qry="INSERT INTO movieseat (userid , seat ,moviename,Time)" +"VALUES ('"+global.user_id+"',13,'"+global.moviename+"','"+global.time+"')";
+			 ps=con.prepareStatement(qry);
+			
+			ps.executeUpdate();
+			}
+		}
+		//BUTTON 14
+		if(e.getSource()==btn14){
+			String qryy="SELECT * FROM movieseat where seat = 14 and Time = '"+global.time+"' and moviename = '"+global.moviename+"'";
+			PreparedStatement ps=con.prepareStatement(qryy);
+			ResultSet rs=ps.executeQuery();
+			
+			
+			if(rs.next()==true){
+				btn14.setBackground(Color.RED);
+			}
+			else{
+			btn14.setBackground(Color.GREEN);
+			String qry="INSERT INTO movieseat (userid , seat ,moviename,Time)" +"VALUES ('"+global.user_id+"',14,'"+global.moviename+"','"+global.time+"')";
+			ps=con.prepareStatement(qry);
+			
+			ps.executeUpdate();
+			}
+		}
+		//BUTTON 15
+		if(e.getSource()==btn15){
+			String qryy="SELECT * FROM movieseat where seat = 15 and Time = '"+global.time+"' and moviename = '"+global.moviename+"'";
+			PreparedStatement ps=con.prepareStatement(qryy);
+			ResultSet rs=ps.executeQuery();
+			
+			
+			if(rs.next()==true){
+				btn15.setBackground(Color.RED);
+			}
+			else{
+			btn15.setBackground(Color.GREEN);
+			String qry="INSERT INTO movieseat (userid , seat ,moviename,Time) " +"VALUES ('"+global.user_id+"',15,'"+global.moviename+"','"+global.time+"')";
+			ps=con.prepareStatement(qry);
+			
+			ps.executeUpdate();
+			}
+		}
+		//BUTTON 16
+		if(e.getSource()==btn16){
+			String qryy="SELECT * FROM movieseat where seat = 16 and Time = '"+global.time+"' and moviename = '"+global.moviename+"'";
+			PreparedStatement ps=con.prepareStatement(qryy);
+			ResultSet rs=ps.executeQuery();
+			
+			
+			if(rs.next()==true){
+				btn16.setBackground(Color.RED);
+			}
+			else{
+			btn16.setBackground(Color.GREEN);
+			String qry="INSERT INTO movieseat (userid , seat ,moviename,Time)" +"VALUES ('"+global.user_id+"',16,'"+global.moviename+"','"+global.time+"')";
+			ps=con.prepareStatement(qry);
+			
+			ps.executeUpdate();
+			}
+		}
+		//BUTTON 17
+		if(e.getSource()==btn17){
+			String qryy="SELECT * FROM movieseat where seat = 17 and Time = '"+global.time+"' and moviename = '"+global.moviename+"'";
+			PreparedStatement ps=con.prepareStatement(qryy);
+			ResultSet rs=ps.executeQuery();
+			
+			
+			if(rs.next()==true){
+				btn17.setBackground(Color.RED);
+			}
+			else{
+			btn17.setBackground(Color.GREEN);
+			String qry="INSERT INTO movieseat (userid , seat ,moviename,Time)" +"VALUES ('"+global.user_id+"',17,'"+global.moviename+"','"+global.time+"')";
+			ps=con.prepareStatement(qry);
+			
+			ps.executeUpdate();
+			}
+		}
+		//BUTTON 18
+		if(e.getSource()==btn18){
+			String qryy="SELECT * FROM movieseat where seat = 18 and Time = '"+global.time+"' and moviename = '"+global.moviename+"'";
+			PreparedStatement ps=con.prepareStatement(qryy);
+			ResultSet rs=ps.executeQuery();
+			
+			
+			if(rs.next()==true){
+				btn18.setBackground(Color.RED);
+			}
+			else{
+			btn18.setBackground(Color.GREEN);
+			String qry="INSERT INTO movieseat (userid , seat ,moviename,Time)" +"VALUES ('"+global.user_id+"',18,'"+global.moviename+"','"+global.time+"')";
+			ps=con.prepareStatement(qry);
+			
+			ps.executeUpdate();
+			}
+		}
+		//BUTTON 19
+		if(e.getSource()==btn19){
+			String qryy="SELECT * FROM movieseat where seat = 19 and Time = '"+global.time+"' and moviename = '"+global.moviename+"'";
+			PreparedStatement ps=con.prepareStatement(qryy);
+			ResultSet rs=ps.executeQuery();
+			
+			
+			if(rs.next()==true){
+				btn19.setBackground(Color.RED);
+			}
+			else{
+			btn19.setBackground(Color.GREEN);
+			String qry="INSERT INTO movieseat (userid , seat ,moviename,Time) " +"VALUES ('"+global.user_id+"',19,'"+global.moviename+"','"+global.time+"')";
+			ps=con.prepareStatement(qry);
+			
+			ps.executeUpdate();
+			}
+		}
+		
+		//BUTTON 20
+		if(e.getSource()==btn20){
+			String qryy="SELECT * FROM movieseat where seat = 20 and Time = '"+global.time+"' and moviename = '"+global.moviename+"'" ;
+			PreparedStatement ps=con.prepareStatement(qryy);
+			ResultSet rs=ps.executeQuery();
+			
+			
+			if(rs.next()==true){
+				btn20.setBackground(Color.RED);
+			}
+			else{
+			btn20.setBackground(Color.GREEN);
+			String qry="INSERT INTO movieseat (userid , seat ,moviename,Time)" +"VALUES ('"+global.user_id+"',20,'"+global.moviename+"','"+global.time+"')";
+			ps=con.prepareStatement(qry);
+			
+			ps.executeUpdate();
+		}
+		}
+		}
+		catch (Exception x){
+			System.out.println(x);
+			}
+		
+		if(e.getSource()==btn21){
+			btn21.setBackground(Color.GREEN);
+			new SwingGui3();
+		}
+		
+	}
+}
+
+// MOVIE TIMMINGS
+
+class SwingGui1 implements ActionListener, ItemListener{
+    Frame f1;
+	Label l1,l2;
+	Button btn1;
+	Checkbox cb1,cb2,cb3,cb4,cb5;
+	CheckboxGroup cbg1;
+	
+	public SwingGui1(){
+	      f1=new Frame();
+		  f1.setSize(500,500);
+		  f1.setBackground(Color.BLACK);
+		  Font f=new Font("comic sans ms",Font.BOLD,30);
+		  Font F=new Font("comic sans ms",Font.BOLD,20);
+		  Font ff=new Font("Georgia",Font.BOLD,15);
+		  l1=new Label("....Movie....");
+		  l2=new Label("Select the Movie Time");
+		  l1.setFont(f);
+		  l2.setFont(F);
+		  l1.setBackground(Color.YELLOW);
+		  l2.setBackground(Color.RED);
+          btn1=new Button("Enter");
+		  cbg1=new CheckboxGroup();
+          cb1=new Checkbox("9:00 AM",cbg1,false);
+          cb2=new Checkbox("12:00 PM",cbg1,false);
+          cb3=new Checkbox("3:00 PM",cbg1,false);
+          cb4=new Checkbox("6:00 PM",cbg1,false);
+          cb5=new Checkbox("9:00 PM",cbg1,false);
+		  cb1.setFont(ff);
+		  cb2.setFont(ff);
+		  cb3.setFont(ff);
+		  cb4.setFont(ff);
+		  cb5.setFont(ff);
+		  cb1.setForeground(Color.RED);
+		  cb2.setForeground(Color.RED);
+		  cb3.setForeground(Color.RED);
+		  cb4.setForeground(Color.RED);
+		  cb5.setForeground(Color.RED);  
+		  
+		  l1.setBounds(150,50,150,45);
+		  l2.setBounds(125,160,210,30);
+		  btn1.setBounds(185,210,80,40);
+		  cb1.setBounds(50,300,200,40);
+		  cb2.setBounds(50,330,200,40);
+		  cb3.setBounds(50,360,200,40);
+		  cb4.setBounds(50,390,200,40);
+		  cb5.setBounds(50,420,200,40);
+		  
+		  f1.add(l1);
+		  f1.add(l2);
+		  f1.add(btn1);
+		  f1.add(cb1);
+		  f1.add(cb2);
+		  f1.add(cb3);
+		  f1.add(cb4);
+		  f1.add(cb5);
+		  
+		  f1.setLayout(null);
+		  f1.setVisible(true);
+		  btn1.addActionListener(this);	
+		  cb1.addItemListener(this); 
+		  cb2.addItemListener(this); 
+		  cb3.addItemListener(this); 
+		  cb4.addItemListener(this); 
+		  cb5.addItemListener(this); 
+	
+	
+	
+	}
+	
+	public void itemStateChanged(ItemEvent f){
+		if(f.getSource()==cb1){
+			global.time = "9:00 AM";			
+		}
+		if(f.getSource()==cb2){
+			global.time= "12:00 PM";			
+		}
+		if(f.getSource()==cb3){
+		    global.time = "3:00 PM";			
+		}
+		if(f.getSource()==cb4){
+			global.time = "6:00 PM";			
+		}
+		if(f.getSource()==cb5){
+			global.time = "9:00 PM";			
+		}
+	}
+	public void actionPerformed(ActionEvent e){
+		
+		if(e.getSource()==btn1){
+			new SwingGui2(); 
+		}
+	    
+		
+		
+	}
+
+
+}
+
+// MOVIE NAME
+
+ class SwingGui extends global implements ActionListener{
+    Frame f1;
+	Label l1,l2;
+	TextField t1; 
+	Button btn1;
+	
+	public SwingGui(){
+	      f1=new Frame();
+		  f1.setSize(500,500);
+		  f1.setBackground(Color.BLACK);
+		  Font f=new Font("comic sans ms",Font.BOLD,30);
+		  Font F=new Font("comic sans ms",Font.BOLD,20);
+		  t1=new TextField();
+		  l1=new Label("....Movie....");
+		  l2=new Label("Enter the Movie name");
+		  l1.setFont(f);
+		  l2.setFont(F);
+		  l1.setBackground(Color.YELLOW);
+		  l2.setBackground(Color.RED);
+		  t1.setBackground(Color.WHITE); 		
+          t1.setForeground(Color.BLACK);
+          btn1=new Button("Enter");		  
+		  
+		 
+		 
+		  l1.setBounds(150,50,150,45);
+		  l2.setBounds(125,105,210,30);
+		  t1.setBounds(125,145,210,30);
+		  btn1.setBounds(185,210,80,40);
+		  
+		  
+		  f1.add(l1);
+		  f1.add(l2);
+		  f1.add(t1);
+		  f1.add(btn1);
+		  
+		  f1.setLayout(null);
+		  f1.setVisible(true);
+		  btn1.addActionListener(this);	
+	
+	
+	}
+	public void actionPerformed(ActionEvent e){
+		
+		
+		if(e.getSource()==btn1){
+			global.moviename = t1.getText();
+			
+			new SwingGui1(); 
+		}
+		}
+		
+	}
+	
+ 
+
+
+class Movie{
+      public static void main(String ar[]){
+			new SwingGui3();
+			
+
+	  }
+
+}
